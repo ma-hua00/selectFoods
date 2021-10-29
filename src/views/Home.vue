@@ -1,12 +1,12 @@
 <template>
   <div class="home">
-      <h1>今天吃点啥?</h1>
+    <h1>今天吃点啥?</h1>
     <el-row type="flex" justify="center">
-      <el-col :span="14">
-        <el-carousel ref="carousel"  :interval="isScroll ? 250 : 0" type="card" height="350px" indicator-position="none" arrow="never">
+      <el-col :span="20">
+        <el-carousel ref="carousel"  :interval="isScroll ? 350 : 0" type="card" height="100px" indicator-position="none" arrow="never" @change="currentChange">
           <el-carousel-item v-for="item in foods" :key="item">
             <div class="item">
-              <img :src="require('../assets/' + item + '.png')" style="width: 100%;">
+              <img :src="require('../assets/' + item + '.png')" style="width: 100%;height: 100px">
               <h3>{{item}}</h3>
             </div>
           </el-carousel-item>
@@ -28,19 +28,28 @@ export default {
     return {
       isScroll: false,
       isScrolling: false,
-      foods: ['咖喱饭', '干锅', '杂粮煎饼', '淮南牛肉汤', '炒饭', '煲仔饭', '猪脚饭', '酸菜鱼', '鸡排饭', '麻辣烫', '黄焖鸡']
+      foods: ['咖喱饭', '干锅', '杂粮煎饼', '淮南牛肉汤', '炒饭', '煲仔饭', '猪脚饭', '酸菜鱼', '鸡排饭', '麻辣烫', '黄焖鸡'],
+      randomIndex: null,
+      use: false
     }
   },
   methods: {
-    async select() {
+    select() {
       let that = this
       this.isScroll = true
       this.isScrolling = true
+      this.randomIndex = Math.floor(Math.random() * this.foods.length)
       setTimeout(() => {
-        that.isScroll = false
-        this.$refs.carousel.setActiveItem(Math.floor(Math.random() * 6))
-        this.isScrolling = false
+        this.use = true
       }, 5000)
+    },
+    currentChange(index) {
+      if (!this.use) return
+      if (this.randomIndex == index) {
+        this.isScroll = false
+        this.isScrolling = false
+        this.use = false
+      }
     }
   }
 }
@@ -48,7 +57,7 @@ export default {
 
 <style lang="scss" scoped>
   h1 {
-    margin-top: 80px;
+    margin: 40px;
     text-align: center;
   }
   .button {
@@ -62,7 +71,7 @@ export default {
     position: absolute;
     bottom: 0;
     left: 50%;
-    font-size: 24px!important;
+    font-size: 12px!important;
     color: #fff!important;
     transform: translateX(-50%);
   }
