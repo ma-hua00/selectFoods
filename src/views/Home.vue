@@ -3,7 +3,7 @@
     <h1>今天吃点啥?</h1>
     <el-row type="flex" justify="center">
       <el-col :span="20">
-        <el-carousel ref="carousel"  :interval="isScroll ? 350 : 0" type="card" height="100px" indicator-position="none" arrow="never" @change="currentChange">
+        <el-carousel ref="carousel"  :interval="isScroll ? 180 : 0" style="margin: 0 auto;overflow-x: unset" type="card" height="100px" indicator-position="none" arrow="never" @change="currentChange">
           <el-carousel-item v-for="item in foods" :key="item">
             <div class="item">
               <img :src="require('../assets/' + item + '.png')" style="width: 100%;height: 100px">
@@ -28,9 +28,17 @@ export default {
     return {
       isScroll: false,
       isScrolling: false,
-      foods: ['咖喱饭', '干锅', '杂粮煎饼', '淮南牛肉汤', '炒饭', '煲仔饭', '猪脚饭', '酸菜鱼', '鸡排饭', '麻辣烫', '黄焖鸡'],
+      // foods: ['咖喱饭', '干锅', '杂粮煎饼', '淮南牛肉汤', '炒饭', '煲仔饭', '猪脚饭', '酸菜鱼', '鸡排饭', '麻辣烫', '黄焖鸡'],
+      foods: [],
       randomIndex: null,
       use: false
+    }
+  },
+  created() {
+    if (this.$store.getters.getFoodState.length === 0) {
+      this.$router.replace('/')
+    } else {
+      this.foods = this.$store.getters.getFoodState
     }
   },
   methods: {
@@ -41,7 +49,7 @@ export default {
       this.randomIndex = Math.floor(Math.random() * this.foods.length)
       setTimeout(() => {
         this.use = true
-      }, 5000)
+      }, 4000)
     },
     currentChange(index) {
       if (!this.use) return
